@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import {ProgressBar} from './components/ProgressBar'
 import './App.css'
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
     if(minutes === 0 && seconds === 0) return
     setBreakTime(true)
     setButtonState(!ButtonState)
+    setSeconds(0)
+    setMinutes(25)
   }
   const repeatButton = () => {
     setBreakSec(60)
@@ -47,6 +50,9 @@ function App() {
         setBreakTime(false)
         setStartCount(true)
         setButtonState(true)
+        setBreakSec(0)
+        setBreakMin(5)
+        return
       }
       if(breakSec > 0){
         setBreakSec(breakSec-1)
@@ -88,25 +94,42 @@ function App() {
     <>
       <section>
         {
-          breakTime === true && <h2 className='breakText'> Break time: {breakMin}:{breakSec} </h2>
+          breakTime === true && <h2 className='breakText'> Break time: {/*{breakMin}:{breakSec}*/} </h2>
         }
       </section>
-
+        
       <section>
-        <h1 style={{fontSize: 100}}>{minutes}:{seconds}</h1>
+        <div>
+          {
+            breakTime === false ? (
+              <div>
+                <h1 style={{fontSize: 100}}>{minutes}:{seconds}</h1>
+                {
+                  startCount === true && <div><ProgressBar time={1500000} color='white'/></div>
+                }
+              </div>
+            ):
+            (
+              <div>
+                <h1 style={{color: 'orange'}}> {breakMin}:{breakSec} </h1>
+                <ProgressBar time={300000} color='orange'/>
+              </div>
+            )
+          }
+        </div>
       </section>
       
       <section>
         <div>
           {
             ButtonState === false ? 
-            ( <button onClick={changeButton}> Start </button> ) :
+            ( <button onClick={changeButton} style={{marginTop: "10px"}}> Start </button> ) :
             ( <button className='breakButton' onClick={breakButton}> Break </button> )
           }
           {
             repeat === true && (
               <div>
-                <button style={{marginTop: "10px"}} onClick={repeatButton} >Repeat</button>
+                <button style={{marginTop: "10px"}} onClick={repeatButton} >Restar</button>
               </div>
             )
           }

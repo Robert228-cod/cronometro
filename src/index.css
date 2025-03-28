@@ -71,6 +71,7 @@ button:focus-visible {
   border-color: orange 1px;
   color: orange;
   border-color: orange;
+  margin-block: 20px;
 }
 .breakText {
   color: orange;
