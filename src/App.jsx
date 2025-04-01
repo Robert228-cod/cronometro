@@ -31,7 +31,7 @@ function App() {
     setSeconds(0)
     setMinutes(25)
   }
-  const repeatButton = () => {
+  const pausePomodoro = () => {
     setBreakSec(60)
     setBreakMin(5)
     setMinutes(25)
@@ -92,18 +92,17 @@ function App() {
 
   return (
     <>
-      <section>
-        {
-          breakTime === true && <h2 className='breakText'> Break time: {/*{breakMin}:{breakSec}*/} </h2>
-        }
-      </section>
+      <h1 style={{fontSize: 25}}>Pomodoro Tracker</h1>
         
       <section>
         <div>
           {
             breakTime === false ? (
               <div>
-                <h1 style={{fontSize: 100}}>{minutes}:{seconds}</h1>
+                <h1 style={{fontSize: 100}}>
+                                 
+                {minutes < 10 && 0}{minutes}:{seconds < 10 && 0}{seconds}
+                </h1>
                 {
                   startCount === true && <div><ProgressBar time={1500000} color='white'/></div>
                 }
@@ -111,7 +110,7 @@ function App() {
             ):
             (
               <div>
-                <h1 style={{color: 'orange'}}> {breakMin}:{breakSec} </h1>
+                <h1 style={{color: 'orange', fontSize: '100'}}> {breakMin < 10 && 0}{breakMin}:{breakSec < 10 && 0}{breakSec} </h1>
                 <ProgressBar time={300000} color='orange'/>
               </div>
             )
@@ -123,13 +122,13 @@ function App() {
         <div>
           {
             ButtonState === false ? 
-            ( <button onClick={changeButton} style={{marginTop: "10px"}}> Start </button> ) :
-            ( <button className='breakButton' onClick={breakButton}> Break </button> )
+            ( <button onClick={changeButton} style={{marginTop: "10px"}}> Start pomodoro</button> ) :
+            ( <button className='breakButton' onClick={breakButton}> Start break </button> )
           }
           {
             repeat === true && (
               <div>
-                <button style={{marginTop: "10px"}} onClick={repeatButton} >Restar</button>
+                <button style={{marginTop: "10px"}} onClick={pausePomodoro} >Pause pomodoro</button>
               </div>
             )
           }
