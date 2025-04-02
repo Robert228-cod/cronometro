@@ -71,8 +71,12 @@ button:focus-visible {
   border-color: orange 1px;
   color: orange;
   border-color: orange;
-  margin-block: 20px;
+  width: 165px;
 }
 .breakText {
   color: orange;
+}
+.countersContent {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }

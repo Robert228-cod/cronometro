@@ -4,7 +4,7 @@ import './App.css'
 
 function App() {
   const [ButtonState, setButtonState] = useState(false)
-  const [repeat, setRepeat] = useState(false)
+  const [countStarted, setCountStarted] = useState(false)
 
   const [startCount, setStartCount] = useState(false)
 
@@ -15,31 +15,65 @@ function App() {
   const [seconds, setSeconds] = useState(0)
   const [minutes, setMinutes] = useState(25)
 
+  const [pauseButton, setPauseButton] = useState(true)
+  const [starBreakButton, setStarBreakButton] = useState(false)
+
+  const [displayPomodoro, setdisplayPomodoro] = useState("")
+  const [displayBreak, setDisplayBreak] = useState("none")
+
+  const [pauseTextButton, setPauseTextButton] = useState("Pause pomodoro")
+
+  const [pomodoroCounter, setPomodoroCounter] = useState(0)
+  const [breakCounter, setBreakCounter] = useState(0)
+
+  const [showresults, setShowresults] = useState("none")
+
+
   const changeButton = () => {
+    setPomodoroCounter(pomodoroCounter+1)
+
+    setPauseTextButton("Pause pomodoro")
+
     setButtonState(!ButtonState)
     setStartCount(!startCount)
-    setRepeat(true)
+    if(countStarted === true){
+      setdisplayPomodoro("")
+      setDisplayBreak("none")
+    } 
+
+    setPauseButton(false)
+    setCountStarted(true)
     setBreakTime(false)
+
     setBreakSec(0)
     setBreakMin(5)
   }
   const breakButton = () => {
-    setStartCount(!startCount)
+    setBreakCounter(breakCounter+1)
+
+    setDisplayBreak("")
+    setdisplayPomodoro("none")
+
+    setStartCount(false)
+
+    setPauseTextButton("Pause break")
+
     if(minutes === 0 && seconds === 0) return
     setBreakTime(true)
+
     setButtonState(!ButtonState)
+
     setSeconds(0)
     setMinutes(25)
   }
+
   const pausePomodoro = () => {
-    setBreakSec(60)
-    setBreakMin(5)
-    setMinutes(25)
-    setSeconds(0)
-    setBreakTime(false)
-    setStartCount(false)
-    setButtonState(false)
-    setRepeat(false)
+    if(pauseTextButton === "Pause pomodoro"){
+      setStartCount(!startCount)
+    }
+    if(pauseTextButton === "Pause break"){
+      setBreakTime(!breakTime)
+    }
   }
 
   // break
@@ -47,6 +81,10 @@ function App() {
     if(!breakTime || minutes === 0) return
     const intervalBreak = setInterval(() => {
       if(breakMin === 0 && breakSec === 0){
+        setPomodoroCounter(pomodoroCounter+1)
+        setDisplayBreak("none")
+        setdisplayPomodoro("")
+        setPauseTextButton("Pause pomodoro")
         setBreakTime(false)
         setStartCount(true)
         setButtonState(true)
@@ -74,7 +112,11 @@ function App() {
     if(!startCount) return
     const interval = setInterval( () => {
       //logica del cronometro
-      if(minutes === 0 && seconds === 0) return
+      if(minutes === 0 && seconds === 0){
+        setStarBreakButton(true)
+        setShowresults("")
+        return
+      }
       if(seconds > 0){
         setSeconds(seconds-1)
       }else{
@@ -88,7 +130,7 @@ function App() {
         clearInterval(interval)
       }
   }, [startCount, seconds])
-  
+
 
   return (
     <>
@@ -96,25 +138,34 @@ function App() {
         
       <section>
         <div>
-          {
-            breakTime === false ? (
-              <div>
-                <h1 style={{fontSize: 100}}>
-                                 
+            <div style={{display: `${displayPomodoro}`}}>
+              <h1 style={{fontSize: 100 , maxHeight: "30px"}}>
                 {minutes < 10 && 0}{minutes}:{seconds < 10 && 0}{seconds}
-                </h1>
-                {
-                  startCount === true && <div><ProgressBar time={1500000} color='white'/></div>
+              </h1>
+              <div style={{padding: "20px"}}>
+                { pauseTextButton === "Pause pomodoro" &&
+                  <div>
+                    <ProgressBar 
+                      time={1500000} 
+                      color='white' 
+                      notPause={startCount}
+                    />
+                  </div>
                 }
               </div>
-            ):
-            (
-              <div>
-                <h1 style={{color: 'orange', fontSize: '100'}}> {breakMin < 10 && 0}{breakMin}:{breakSec < 10 && 0}{breakSec} </h1>
-                <ProgressBar time={300000} color='orange'/>
-              </div>
-            )
-          }
+            </div>
+            <div style={{display: `${displayBreak}`}}>
+              <h1 style={{color: 'orange', fontSize: 100 , maxHeight: "30px" }}> {breakMin < 10 && 0}{breakMin}:{breakSec < 10 && 0}{breakSec} </h1>
+                { pauseTextButton === "Pause break" &&
+                  <div style={{padding: "20px"}}>
+                  <ProgressBar 
+                    time={300000} 
+                    color='orange' 
+                    notPause={breakTime}
+                  />
+                  </div>
+                }
+            </div>
         </div>
       </section>
       
@@ -122,16 +173,26 @@ function App() {
         <div>
           {
             ButtonState === false ? 
-            ( <button onClick={changeButton} style={{marginTop: "10px"}}> Start pomodoro</button> ) :
-            ( <button className='breakButton' onClick={breakButton}> Start break </button> )
+            ( <button onClick={changeButton} style={{marginTop: "0"}}> Start pomodoro</button> ) :
+            ( <button disabled={starBreakButton} className='breakButton' onClick={breakButton}> Start break </button> )
           }
-          {
-            repeat === true && (
-              <div>
-                <button style={{marginTop: "10px"}} onClick={pausePomodoro} >Pause pomodoro</button>
-              </div>
-            )
-          }
+          <div>
+            <button disabled={pauseButton} style={{marginTop: "10px"}} onClick={pausePomodoro} >{pauseTextButton}</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className='countersContent' style={{display: `${showresults}`}}>
+          <div>
+            <h2> Pomodoros: </h2>
+            <h3> {pomodoroCounter} </h3>
+          </div>
+
+          <div>
+            <h2> Breaks: </h2>
+            <h3> {breakCounter} </h3>
+          </div>
         </div>
       </section>
     </>
