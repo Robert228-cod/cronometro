@@ -68,11 +68,24 @@ function App() {
   }
 
   const pausePomodoro = () => {
-    if(pauseTextButton === "Pause pomodoro"){
-      setStartCount(!startCount)
+    if(pauseTextButton === "Pause pomodoro" || pauseTextButton === "Restore pomodoro"){
+      if(pauseTextButton === "Restore pomodoro"){
+        setPauseTextButton("Pause pomodoro")
+        setStartCount(!startCount)
+      }else{
+        setStartCount(!startCount)
+        setPauseTextButton("Restore pomodoro")
+      }
+      
     }
-    if(pauseTextButton === "Pause break"){
-      setBreakTime(!breakTime)
+    if(pauseTextButton === "Pause break" || pauseTextButton === "Restore break"){
+      if(pauseTextButton === "Restore break"){
+        setPauseTextButton("Pause break")
+        setBreakTime(!breakTime)
+      }else{
+        setBreakTime(!breakTime)
+        setPauseTextButton("Restore break")
+      }
     }
   }
 
@@ -143,7 +156,7 @@ function App() {
                 {minutes < 10 && 0}{minutes}:{seconds < 10 && 0}{seconds}
               </h1>
               <div style={{padding: "20px"}}>
-                { pauseTextButton === "Pause pomodoro" &&
+                { (pauseTextButton === "Pause pomodoro" || pauseTextButton === "Restore pomodoro") &&
                   <div>
                     <ProgressBar 
                       time={1500000} 
@@ -156,7 +169,7 @@ function App() {
             </div>
             <div style={{display: `${displayBreak}`}}>
               <h1 style={{color: 'orange', fontSize: 100 , maxHeight: "30px" }}> {breakMin < 10 && 0}{breakMin}:{breakSec < 10 && 0}{breakSec} </h1>
-                { pauseTextButton === "Pause break" &&
+                { (pauseTextButton === "Pause break" || pauseTextButton === "Restore break") &&
                   <div style={{padding: "20px"}}>
                   <ProgressBar 
                     time={300000} 
@@ -173,11 +186,11 @@ function App() {
         <div>
           {
             ButtonState === false ? 
-            ( <button onClick={changeButton} style={{marginTop: "0"}}> Start pomodoro</button> ) :
-            ( <button disabled={starBreakButton} className='breakButton' onClick={breakButton}> Start break </button> )
+            ( <button onClick={changeButton} style={{marginTop: "0", width: "200px"}}> Start pomodoro</button> ) :
+            ( <button disabled={starBreakButton} className='breakButton' onClick={breakButton} style={{width: "200px"}}> Start break </button> )
           }
           <div>
-            <button disabled={pauseButton} style={{marginTop: "10px"}} onClick={pausePomodoro} >{pauseTextButton}</button>
+            <button disabled={pauseButton} style={{marginTop: "10px" , width: "200px"}} onClick={pausePomodoro} >{pauseTextButton}</button>
           </div>
         </div>
       </section>
