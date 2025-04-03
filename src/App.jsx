@@ -28,7 +28,7 @@ function App() {
 
   const [showresults, setShowresults] = useState("none")
 
-
+  //funciones para actualizaionces
   const changeButton = () => {
     setPomodoroCounter(pomodoroCounter+1)
 
@@ -67,6 +67,7 @@ function App() {
     setMinutes(25)
   }
 
+  // para cambiar el texto del boton pause
   const pausePomodoro = () => {
     if(pauseTextButton === "Pause pomodoro" || pauseTextButton === "Restore pomodoro"){
       if(pauseTextButton === "Restore pomodoro"){
