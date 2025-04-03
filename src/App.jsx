@@ -146,7 +146,7 @@ function App() {
 
 
   return (
-    <>
+    <div className='background'>
       <h1 style={{fontSize: 25}}>Pomodoro Tracker</h1>
         
       <section>
@@ -208,7 +208,7 @@ function App() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
 
